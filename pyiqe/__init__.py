@@ -91,7 +91,7 @@ class Api(object):
         """
         assert imgpath is not None or imgdata is not None, "either imgpath or imgdata required!"
         if imgdata is None: imgdata = open(imgpath).read()
-        files  = [ ("img", imgpath or 'NONAME', imgdata) ]
+        files  = [ ("img", imgpath or sha1(imgdata).hexdigest(), imgdata) ]
         fields = [("webhook", webhook)] if webhook else None
         data, sig = self._post(selector="query", fields=fields, files=files, json=json)
         return data, sig
