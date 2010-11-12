@@ -66,16 +66,19 @@ class Api(object):
             res = simplejson.loads(res)
         return res, sig
     
-    def query(self, imgpath=None, imgdata=None, webhook=None, json=True):
+    def query(self, imgpath=None, imgdata=None, webhook=None, extra=None, modules=None, json=True):
         """
         :type imgpath: string
         :param imgpath: Path to the image you want to have tagged
         
         :type imgdata: string
         :param imgpath: binary image data
-
+        
         :type webhook: string
         :param webhook: url to post the labels
+        
+        :type extra: string
+        :param extra: JSON encoded extra information
         
         :type json: boolean
         :param json: If True the output is a Python dictionary, otherwise XML
@@ -92,7 +95,11 @@ class Api(object):
         assert imgpath is not None or imgdata is not None, "either imgpath or imgdata required!"
         if imgdata is None: imgdata = open(imgpath).read()
         files  = [ ("img", imgpath or sha1(imgdata).hexdigest(), imgdata) ]
-        fields = [("webhook", webhook)] if webhook else None
+        fields = []
+        if webhook: fields += [("webhook", webhook)]
+        if modules: fields += [("modules", simplejson.dumps(modules))]
+        if extra: fields += [("extra", simplejson.dumps(extra))]
+        fields = fields if fields else None
         data, sig = self._post(selector="query", fields=fields, files=files, json=json)
         return data, sig
     
