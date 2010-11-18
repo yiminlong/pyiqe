@@ -10,12 +10,14 @@ def Api(*args, **kwargs):
     
     Usage
     -----
+    iqe = Api(API_KEY, API_SECRET, version="1.2")
+
+    You can obtain api credentials at http://developer.iqengines.com/accounts/register/
     
-    iqe = Api(KEY,SECRET, version="1.2")
-    
-    For further information see the docstrings for the following classes:
+    For further information see the docstrings in the following class:
     
     pyiqe.apis.api1_2.Api
+    
     """
     
     version = kwargs.pop('version', STABLE_API_VERSION)
