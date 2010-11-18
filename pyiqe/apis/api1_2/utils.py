@@ -1,15 +1,17 @@
+# -*- coding: UTF-8 -*-
+
 import httplib, mimetypes
 import urllib2
 
-def post_multipart(host, protocol, selector, fields, files=[]):
+def multipart_call(method, host, protocol, selector, fields, files=None):
     """
     Post fields and files to an http host as multipart/form-data.
     fields is a sequence of (name, value) elements for regular form fields.
     files is a sequence of (name, filename, value) elements for data to be uploaded as files
     Return the server's response page.
     """
+    files = files or []
     content_type, body = encode_multipart_formdata(fields, files)
-    # h = httplib.HTTPConnection(host=host, port=port)
     if protocol == "https":
         h = httplib.HTTPSConnection(host=host)
     elif protocol == "http":
@@ -17,10 +19,10 @@ def post_multipart(host, protocol, selector, fields, files=[]):
     else:
         raise NameError, "unknown protocol"
     headers = {
-        'User-Agent': 'INSERT USERAGENTNAME',
-        'Content-Type': content_type
+            'User-Agent': 'INSERT USERAGENTNAME',
+            'Content-Type': content_type
         }
-    h.request('POST', selector, body, headers)
+    h.request(method, selector, body, headers)
     res = h.getresponse()
     return res
 
