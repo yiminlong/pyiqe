@@ -1,20 +1,25 @@
 # -*- coding: UTF-8 -*-
+__all__ = ['Api']
 
+import apis.api1_2
 STABLE_API_VERSION = "1.2"
 
-def Api(*args, **kwargs, version=STABLE_API_VERSION):
+def Api(*args, **kwargs):
     """
-    A shortcut method for generating api instances given the version number,
-    if no version number is given, it defaults to the most current stable
-    IQEngines Api Version.
+    This is a thin wrapper around the Actual API Instances.
+    
+    Usage
+    -----
+    
+    iqe = Api(KEY,SECRET, version="1.2")
     
     For further information see the docstrings for the following classes:
     
     pyiqe.apis.api1_2.Api
     """
     
-    
-    import apis.api1_2
+    version = kwargs.pop('version', STABLE_API_VERSION)
+
     api_map  = {
         "1.2" : apis.api1_2.Api,
     }
