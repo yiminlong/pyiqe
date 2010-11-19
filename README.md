@@ -33,7 +33,7 @@ Basic Usage
 To use the API, you first create an API instance that handles the requests to the IQ Engines API. You can initialize it using your API key and secret:
 
     >>> from pyiqe import Api
-    >>> api = Api(API_KEY, SECRET)
+    >>> api = Api(IQE_KEY, IQE_SECRET)
 
 You can query an image by doing:
 
