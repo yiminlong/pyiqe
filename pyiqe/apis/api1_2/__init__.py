@@ -14,7 +14,7 @@ class __BaseAPI__(object):
 
     host     = "api.iqengines.com"
     protocol = "http"
-    selector = "/v1.3/%s/"
+    selector = "/v1.2/%s/"
 
     def __init__(self, key=None, secret=None):
         super(__BaseAPI__,self).__init__()
@@ -114,7 +114,7 @@ class __IQObjects__(__BaseAPI__):
     =====
 
     >>> from pyiqe import Api
-    >>> iqe = Api(version="1.3", key="blah", secret="blah")
+    >>> iqe = Api(version="1.2", key="blah", secret="blah")
     >>> iqe.objects.create( 
             name   = "Back to the future DVD"
             images = [
@@ -225,7 +225,7 @@ class __IQObjects__(__BaseAPI__):
 
 
 class Api(__BaseAPI__):
-    """ Api 1.3 Handle """
+    """ Api 1.2 Handle """
 
 
     def __init__(self, key=None, secret=None):
@@ -308,7 +308,7 @@ class Api(__BaseAPI__):
                                     u'labels': u'Duracell Batteries'}}}
 
         """
-        data, _ = self._signed_call(method="POST", 
+        data, _  = self._signed_call(method="POST", 
                                     selector="result", 
                                     fields=[("qid", qid)], 
                                     json=json)
