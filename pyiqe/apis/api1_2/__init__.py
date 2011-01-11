@@ -233,7 +233,7 @@ class Api(__BaseAPI__):
         self.objects = __IQObjects__(key, secret)
 
 
-    def query(self, imgpath=None, imgdata=None, webhook=None, extra=None, modules=None, json=True):
+    def query(self, imgpath=None, imgdata=None, webhook=None, extra=None, modules=None, json=True, device_id=None):
         """
         :type imgpath: string
         :param imgpath: Path to the image you want to have tagged
@@ -246,6 +246,9 @@ class Api(__BaseAPI__):
 
         :type extra: string
         :param extra: JSON encoded extra information
+        
+        :type device_id: string
+        :param device_id: arbitrary string to represent separate devices
 
         :type json: boolean
         :param json: If True the output is a Python dictionary, otherwise XML
@@ -263,15 +266,21 @@ class Api(__BaseAPI__):
         if imgdata is None: imgdata = open(imgpath).read()
         files  = [ ("img", imgpath or sha1(imgdata).hexdigest(), imgdata) ]
         fields = []
-        if webhook: fields += [("webhook", webhook)]
-        if modules: fields += [("modules", simplejson.dumps(modules))]
-        if extra: fields += [("extra", simplejson.dumps(extra))]
+        if webhook:
+            fields += [("webhook", webhook)]
+        if modules:
+            fields += [("modules", simplejson.dumps(modules))]
+        if extra:
+            fields += [("extra", simplejson.dumps(extra))]
+        if device_id:
+            fields += [("device_id", device_id)]
+            
         fields = fields if fields else None
         data, sig = self._signed_call(method="POST", selector="query", fields=fields, files=files, json=json)
         return data, sig
 
 
-    def update(self, json=True):
+    def update(self, json=True, device_id=None):
         """
 
         :type json: boolean
@@ -287,7 +296,10 @@ class Api(__BaseAPI__):
                                                    u'labels': u'Duracell Batteries'}}]}}
 
         """
-        data, _ = self._signed_call(method="POST", selector="update", json=json)
+        fields = []
+        if device_id:
+            fields=[("device_id", device_id)]
+        data, _ = self._signed_call(method="POST", selector="update", fields=fields, json=json)
         return data
 
 
