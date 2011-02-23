@@ -6,7 +6,7 @@ setup(name         = 'pyiqe',
       description  = "IQ Engines API client",
       keywords     = ["iqengines", "pyiqe", "visual search"],
       url          = "http://github.com/iqengines/pyiqe",
-      download_url = "http://github.com/iqengines/pyiqe/tarball/1.2.1",
+      download_url = "https://github.com/iqengines/pyiqe/tarball/v1.2.1",
       packages     = ['pyiqe','pyiqe.apis', 'pyiqe.apis.api1_2'],
       classifiers  = [
           "Programming Language :: Python",
