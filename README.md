@@ -20,6 +20,9 @@ To install the pyiqe module run setup.py
 
     python setup.py install
 
+or to install via pip or easy_install:
+    
+    pip install pyiqe
 
 API Credentials
 ---------------
