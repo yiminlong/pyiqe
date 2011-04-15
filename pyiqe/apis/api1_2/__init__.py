@@ -282,7 +282,6 @@ class Api(__BaseAPI__):
 
     def update(self, json=True, device_id=None):
         """
-
         :type json: boolean
         :param json: If True the output is a Python dictionary, otherwise XML
 
