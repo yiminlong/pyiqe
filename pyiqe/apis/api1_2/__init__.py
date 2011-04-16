@@ -213,15 +213,15 @@ class __IQObjects__(__BaseAPI__):
                                      json=True)
         return res
 
-    def delete(self, obj_id=None):
-        """
-        Retrieves an object using either the object_id OR a custom_id
-        and a collection name 
-        """
-        res, sig = self._signed_call(method="DELETE", 
-                                     selector="object/%s" % obj_id, 
-                                     json=True)
-        return res
+    # def delete(self, obj_id=None):
+    #     """
+    #     Retrieves an object using either the object_id OR a custom_id
+    #     and a collection name 
+    #     """
+    #     res, sig = self._signed_call(method="DELETE", 
+    #                                  selector="object/%s" % obj_id, 
+    #                                  json=True)
+    #     return res
 
 
 class Api(__BaseAPI__):
@@ -233,7 +233,7 @@ class Api(__BaseAPI__):
         self.objects = __IQObjects__(key, secret)
 
 
-    def query(self, imgpath=None, imgdata=None, webhook=None, extra=None, modules=None, json=True, device_id=None):
+    def query(self, imgpath=None, imgdata=None, webhook=None, extra=None, modules=None, json=True, device_id=None, multiple_results=False):
         """
         :type imgpath: string
         :param imgpath: Path to the image you want to have tagged
@@ -252,6 +252,9 @@ class Api(__BaseAPI__):
 
         :type json: boolean
         :param json: If True the output is a Python dictionary, otherwise XML
+        
+        :type multiple_result: boolean
+        :param multiple_result: If True the results will contain all possible matches for the given query
 
         Submit an image to the IQ Engines image labeling engine using the Query API::
 
@@ -274,6 +277,9 @@ class Api(__BaseAPI__):
             fields += [("extra", simplejson.dumps(extra))]
         if device_id:
             fields += [("device_id", device_id)]
+        if multiple_results:
+            fields += [("multiple_results", "1")]
+        
             
         fields = fields if fields else None
         data, sig = self._signed_call(method="POST", selector="query", fields=fields, files=files, json=json)
