@@ -41,7 +41,7 @@ class TestApi(unittest.TestCase):
         response, qid = self.api.query('testdata/multipleresult.jpeg', extra={'a':1}, device_id=device_id, multiple_results=True)
         print qid
         
-        result = self.api.update(device_id)
+        result = self.api.update(device_id=device_id)
         pprint(result)
-        assert False
-        
+        assert len(result['data']['results'][0]['qid_data']) > 1, "Invalid Multiple Result Return"
+
