@@ -202,27 +202,50 @@ class __IQObjects__(__BaseAPI__):
 
         fields = []
         if obj_id:
-            fields += [("obj_id",obj_id)]
+            selector = "object/%s" % obj_id
         elif custom_id and collection:
+            selector = "object"
             fields += [("custom_id", custom_id)]
             fields += [("collection", collection)]
 
-        res, sig = self._signed_get( method="GET", 
-                                     selector="object",
-                                     fields=fields,
+        res, sig = self._signed_call( method="GET", 
+                                      selector=selector,
+                                      fields=fields,
+                                      json=True)
+        return res
+
+    def delete(self, obj_id):
+        """
+        deletes an object
+        """
+        res, sig = self._signed_call(method="DELETE", 
+                                     selector="object/%s/" % obj_id, 
                                      json=True)
         return res
 
-    # def delete(self, obj_id=None):
-    #     """
-    #     Retrieves an object using either the object_id OR a custom_id
-    #     and a collection name 
-    #     """
-    #     res, sig = self._signed_call(method="DELETE", 
-    #                                  selector="object/%s" % obj_id, 
-    #                                  json=True)
-    #     return res
+class __IQImages__(__BaseAPI__):
 
+    def get(self, img_id):
+        """ Retrieves an image and a collection name """
+        fields = []
+        if img_id:
+            selector = "image/%s/" % img_id
+        res, sig = self._signed_call( method="GET", 
+                                      selector=selector,
+                                      fields=fields,
+                                      json=True)
+        return res
+
+    def delete(self, obj_id):
+        """
+        deletes an object
+        """
+        res, sig = self._signed_call(method="DELETE", 
+                                     selector="object/%s/" % obj_id, 
+                                     json=True)
+        return res
+    
+    
 
 class Api(__BaseAPI__):
     """ Api 1.2 Handle """
@@ -231,6 +254,7 @@ class Api(__BaseAPI__):
     def __init__(self, key=None, secret=None):
         super(Api, self).__init__(key, secret)
         self.objects = __IQObjects__(key, secret)
+        self.images  = __IQImages__(key, secret)
 
 
     def query(self, imgpath=None, imgdata=None, webhook=None, extra=None, modules=None, json=True, device_id=None, multiple_results=False):
