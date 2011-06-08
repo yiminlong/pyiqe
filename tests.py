@@ -80,6 +80,14 @@ class TestTrainingAPI(unittest.TestCase):
         rs_get = self.api.objects.get(obj_id)
         self.assertTrue(rs_get['object']['obj_id'] == obj_id, "Retrieval Failed")
         
+        time.sleep(3)
+        # try retrieving related_image
+        img_id = rs_get['object']['related_images']['images'][0]['img_id']
+        print(rs_get)
+        rs_img_get = self.api.images.get(img_id)
+        print rs_img_get
+        self.assertTrue(rs_img_get['image']['related_object']['obj_id'] == obj_id)
+        
         # wait 10 seconds before querying
         time.sleep(10)
 
@@ -102,6 +110,8 @@ class TestTrainingAPI(unittest.TestCase):
         self.assertTrue(rs_result['data']['results']['labels'] == name, "Result API does not return correct labels")
         self.assertTrue(rs_result['data']['results']['obj_id'] == rs_training['obj_id'], "Result API does not return correct labels")
 
+
+
 class RestfulImagesApi(unittest.TestCase):
     def setUp(self):
         from pyiqe import Api
@@ -115,3 +125,4 @@ class RestfulImagesApi(unittest.TestCase):
     def testNonExistentImage(self):
         rs_get = self.api.images.get('cc16e9b6f1be7773b53a817a1eea5bdd')
         self.assertTrue(rs_get['error'] == 1, "No error was thrown for a non-existing image")
+    
