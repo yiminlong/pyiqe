@@ -89,7 +89,7 @@ class TestTrainingAPI(unittest.TestCase):
         self.assertTrue(rs_img_get['image']['related_object']['obj_id'] == obj_id)
         
         # wait 10 seconds before querying
-        time.sleep(10)
+        time.sleep(20)
 
         # query the system for the image
         rs_query, qid = self.api.query(imgpath=imgpath)
@@ -104,7 +104,7 @@ class TestTrainingAPI(unittest.TestCase):
             assert rs_result['data']['error'] == 0, "Result API request failed"
             if rs_result['data'].has_key('results'):
                 break
-            time.sleep(1)
+            time.sleep(2)
 
         self.assertTrue(rs_result['data'].has_key('results'), "Result API did not return any result after 20 tries")
         self.assertTrue(rs_result['data']['results']['labels'] == name, "Result API does not return correct labels")
