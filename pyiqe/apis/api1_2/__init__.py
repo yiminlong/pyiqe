@@ -225,6 +225,7 @@ class __IQObjects__(__BaseAPI__):
 
 class __IQImages__(__BaseAPI__):
 
+
     def get(self, img_id):
         """ Retrieves an image and a collection name """
         fields = []

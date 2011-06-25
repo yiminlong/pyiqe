@@ -80,7 +80,7 @@ class TestTrainingAPI(unittest.TestCase):
         rs_get = self.api.objects.get(obj_id)
         self.assertTrue(rs_get['object']['obj_id'] == obj_id, "Retrieval Failed")
         
-        time.sleep(3)
+        time.sleep(20)
         # try retrieving related_image
         img_id = rs_get['object']['related_images']['images'][0]['img_id']
         print(rs_get)
