@@ -1,6 +1,8 @@
 import time
 import unittest    
 from pprint import pprint 
+import os.path as P
+CWD = P.abspath(P.dirname(__file__))
 
 def test_basic_imports():
     """ Make sure we can atleast import everything """
@@ -47,13 +49,17 @@ class TestTrainingAPI(unittest.TestCase):
     def setUp(self):
         from pyiqe import Api
         self.api = Api(version="1.2")
+        self.prev_upload = P.join(CWD, "uploaded.txt")
+        
 
 
     def tearDown(self):
+        import os
         rs_delete = self.api.objects.delete(self.obj_id)
         print rs_delete
         self.assertTrue(rs_delete['error'] == 0)
-        
+        if P.exists(self.prev_upload):
+            os.remove(self.prev_upload)
     
     def test_CreateObjectandDelete(self):
         import time
@@ -63,7 +69,16 @@ class TestTrainingAPI(unittest.TestCase):
 
         imgpath = P.join(P.dirname(P.abspath(__file__)), "testdata/fox.jpeg")
         name = str(time.time())
+        
+        # check if we didn't clean up from last test
 
+        if P.exists(self.prev_upload):
+            print "removing previous upload"
+            prev_oid = open(self.prev_upload, "r").read().strip()
+            self.api.objects.delete(prev_oid)
+            
+            
+        
         # train the system
         rs_training = self.api.objects.create(
             name = name,
@@ -74,11 +89,19 @@ class TestTrainingAPI(unittest.TestCase):
         print "Training API response =", rs_training
         self.assertTrue(rs_training['error'] == 0, "Training API request failed")
         
+        
+        
+        
         # try retrieving it
         obj_id = rs_training['obj_id']
         self.obj_id = obj_id
         rs_get = self.api.objects.get(obj_id)
         self.assertTrue(rs_get['object']['obj_id'] == obj_id, "Retrieval Failed")
+        
+        # write to previous upload file
+        print "writing upload file"
+        with open(self.prev_upload, "w") as fh:
+            fh.write(obj_id)
         
         time.sleep(200)
         # try retrieving related_image
